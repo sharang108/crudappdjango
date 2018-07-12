@@ -1,0 +1,2 @@
+# crudappdjango
+Django Sample
