@@ -55,7 +55,7 @@ ROOT_URLCONF = 'crudapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ BASE_DIR + '/crudapp/templates/' ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
