@@ -20,7 +20,7 @@ def login(request):
 		uname = request.POST.get("username")
 		passw = request.POST.get("password")
 		if employee.authenticateEmployee(uname, passw) == True:
-			response = get_template('home.html').render()
+			response = get_template('index.html').render()
 	return HttpResponse(response)
 
 def home(request):
@@ -32,7 +32,6 @@ def home(request):
 # @csrf_protect
 @csrf_exempt
 def register(request):
-
 	if request.method == 'GET':
 		response = None
 		response = get_template('register.html').render()
@@ -44,6 +43,8 @@ def register(request):
 		fname = request.POST.get("fname")
 		lname = request.POST.get("lname")
 		salary = request.POST.get("salary")
-		employee.createEmployee(username, password, fname, lname, salary)
-		response = redirect('/login')
+		modelResponse = employee.createEmployee(username, password, fname, lname, salary)
+		if modelResponse == True: 
+			response = redirect('/login')
+		respose = redirect('/register')
 	return response

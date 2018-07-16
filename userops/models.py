@@ -10,8 +10,13 @@ class employee(models.Model):
 
 
 	def createEmployee(uname, fname, lname, passw, salary):
+		response = False
 		e = employee(username=uname, fname=fname, lname=lname, password=passw, salary=salary)
 		e.save()
+		e = employee.objects.get(username=uname)
+		if e.username == uname: 
+			response = True
+		return response
 
 	def authenticateEmployee(uname, passw):
 		response = False
