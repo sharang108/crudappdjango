@@ -10,10 +10,18 @@ import pdb #debugger
 # Create your views here.
 
 #pdb.set_trace()
+@csrf_exempt
 def login(request):
-	t = get_template('login.html')
-	html = t.render()
-	return HttpResponse(html)
+	response = None
+	if request.method == 'GET':
+		t = get_template('login.html')
+		response = t.render()
+	elif request.method == 'POST':
+		uname = request.POST.get("username")
+		passw = request.POST.get("password")
+		if employee.authenticateEmployee(uname, passw) == True:
+			response = get_template('home.html').render()
+	return HttpResponse(response)
 
 def home(request):
 	t = get_template('index.html')
@@ -23,21 +31,13 @@ def home(request):
 # @cache_page(60 * 15)
 # @csrf_protect
 @csrf_exempt
-def authenticate(request):
-	response = None
-	if request.method == 'POST':
-		uname = request.POST.get("username")
-		passw = request.POST.get("password")
-		if employee.authenticateEmployee(uname, passw) == True:
-			response = get_template('home.html').render()
-	return HttpResponse(response)
-
-@csrf_exempt
 def register(request):
+
 	if request.method == 'GET':
 		response = None
 		response = get_template('register.html').render()
 		response = HttpResponse(response)
+	
 	elif request.method == 'POST':
 		username = request.POST.get("username")
 		password = request.POST.get("password")
