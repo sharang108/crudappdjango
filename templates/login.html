@@ -5,9 +5,10 @@
 	</head>
 	<body>
 		<form action="authenticate" method="post">
+			{% csrf_token %}
 			<label for="username">Username</label>
 			<input type="text" name="username"/>
-			<label for="pass">Password</label>
+			<label for="password">Password</label>
 			<input type="password" name="pass"/>
 			<button type="submit">Submit</button>
 			<a href="/register">Register</a>

@@ -6,6 +6,6 @@ from django.http import HttpResponse
 urlpatterns = [
 	path('login', views.login, name="login"),
 	path('', views.home, name="home"),
-	path('authenticate', views.authenticate, name="home")
-	#path('/register', views.register)
+	path('authenticate', views.authenticate, name="home"),
+	path('register', views.register, name="register")
 ]
