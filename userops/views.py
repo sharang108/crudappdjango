@@ -1,5 +1,5 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.shortcuts import render,redirect,render_to_response
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import get_template
 from userops.models import employee
 from django.views.decorators.cache import cache_page
@@ -19,14 +19,20 @@ def login(request):
 	elif request.method == 'POST':
 		uname = request.POST.get("username")
 		passw = request.POST.get("password")
-		if employee.authenticateEmployee(uname, passw) == True:
-			response = get_template('index.html').render()
+		ename = employee.authenticateEmployee(uname, passw) 
+		if ename is not None:
+			request.session['uname'] = ename
+			response = render_to_response('user_home.html', {"uname": request.session['uname']})
 	return HttpResponse(response)
 
 def home(request):
-	t = get_template('index.html')
-	html = t.render()
-	return HttpResponse(html)	
+	response = None
+	if request.session['uname'] is not None:
+		response = render_to_response('user_home.html', {"uname": request.session['uname']})
+	else:
+		t = get_template('index.html')
+		response = t.render()
+	return HttpResponse(response)	
 
 # @cache_page(60 * 15)
 # @csrf_protect
@@ -48,3 +54,22 @@ def register(request):
 			response = redirect('/login')
 		respose = redirect('/register')
 	return response
+
+def logout(request):
+	if request.session['uname'] is not None:
+		request.session['uname'] = None
+	return redirect('/login')
+
+
+# Ajax Request Handler
+def userProfile(request):
+	e = employee.getEmployee(request.session['uname'])
+	data = { 
+	'fname' : e.fname,
+	'lname' : e.lname,
+	'uname' : e.username,
+	'salary': e.salary
+	}
+	return JsonResponse(data)
+
+

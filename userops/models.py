@@ -19,8 +19,11 @@ class employee(models.Model):
 		return response
 
 	def authenticateEmployee(uname, passw):
-		response = False
+		response = None
 		e = employee.objects.get(username=uname)
 		if passw == e.password:
-			response = True
+			response = e.username
 		return response
+
+	def getEmployee(uname):
+		return employee.objects.get(username=uname)
